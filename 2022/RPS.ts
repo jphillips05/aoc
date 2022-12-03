@@ -65,13 +65,6 @@ export default class RPC {
         return encryptedStrategy.at((idx + 3 - 1) % 3)
     }
 
-    getByValue(map: Map<string, string>, searchValue: string) {
-        for (let [key, value] of map.entries()) {
-          if (value === searchValue)
-            return key;
-        }
-      }
-
 }
 
     
