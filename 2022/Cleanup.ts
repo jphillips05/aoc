@@ -29,12 +29,12 @@ export default class Cleanup {
 
   has(a: Array<number>, b: Array<number>): boolean {
     for(let i = 0; i < a.length; i++) {
-      if (b.indexOf(a[i]) === -1) {
-        return false;
+      if (b.indexOf(a[i]) > -1) {
+        return true;
       }
     }
 
-    return true;
+    return false;
   }
 
   makeRange(section: string): Array<number> {

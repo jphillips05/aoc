@@ -19,7 +19,8 @@ Deno.test('range', () => {
 
 Deno.test('has', () => {
     assertEquals(true, c.has([3,4,5,6,7], [2,3,4,5,6,7,8]))
-    assertEquals(false, c.has([1,2,3,4,5,6,7], [2,3,4,5,6,7,8]))
+    assertEquals(true, c.has([1,2,3,4,5,6,7], [2,3,4,5,6,7,8]))
+    assertEquals(false, c.has([1], [2,3,4,5,6,7,8]))
 })
 
 Deno.test('check sections', () => {
@@ -29,5 +30,5 @@ Deno.test('check sections', () => {
 })
 
 Deno.test('exec', () => {
-    assertEquals(2, c.exec())
+    assertEquals(4, c.exec())
 })
