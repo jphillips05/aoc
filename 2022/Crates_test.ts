@@ -66,6 +66,6 @@ Deno.test('move', () => {
 
 Deno.test('exec', () => {
     const d = data.split('\n\n')[0]
-    assertEquals('CMZ', c.exec())
+    assertEquals('MCD', c.exec())
 
 })

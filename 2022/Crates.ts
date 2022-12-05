@@ -14,11 +14,19 @@ export default class Crates {
         const stacks = this.buildStacks(this.parts[0])
         this.instructions = this.buildInstructions(this.parts[1].split('\n'))
         for(const instruction of this.instructions) {
+            const tempStack = new Stack<string>()
             for(let i = 0; i < instruction[0]; i++) {
                 const fromStack = stacks.get(instruction[1])
+                
+                
+                if(!fromStack) throw 'Could not get stack'
+                this.move(fromStack, tempStack)
+            }
+
+            for(let i = 0; i < instruction[0]; i++) { 
                 const toStack = stacks.get(instruction[2])
-                if(!fromStack || !toStack) throw 'Could not get stack'
-                this.move(fromStack, toStack)
+                if(!toStack) throw 'Could not get stack'
+                this.move(tempStack, toStack)
             }
         }
 
