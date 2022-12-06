@@ -4,7 +4,7 @@ const main = async () => {
     const c = new Signal(data)
     // c.isWin('X', 'C')
 
-    console.log(c.exec())
+    console.log(c.exec(14))
 }
 
 if(import.meta.main) main()

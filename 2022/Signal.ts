@@ -4,16 +4,16 @@ export class Signal {
     constructor(private signal: string) {
     }
 
-    exec() {
-        this.findHeader(this.signal)
+    exec(distinct: number) {
+        this.findHeader(this.signal, distinct)
         return this.Marker
     }
 
-    findHeader(message: string) {
+    findHeader(message: string, distinct: number) {
         let retVal: Array<string> = []
         while(this.Marker < message.length) {
 
-            if(retVal.length === 4) {
+            if(retVal.length === distinct) {
                 
                 return retVal.join('')
             }
