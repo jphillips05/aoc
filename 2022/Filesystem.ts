@@ -4,14 +4,15 @@ interface hash {
     [key: string]: number;
 }
 
-
-
 export class Filesystem {
     logs: string[];
     hash: hash = {}
     // dirList: string[] = []
     completedArr: string[][] = []
     breadCrumb: string[] = []
+    totalSpace = 70000000
+    usedSpace = 0
+    unused = 0
 
     constructor(private data: string) {
         this.logs = data.split('\n')
@@ -28,28 +29,31 @@ export class Filesystem {
                
                 if(size > 0) {
                     const key =this.breadCrumb.join(',')
-                    this.hash[key] = this.hash[key] || 0
                     this.hash[key] += size
-                    if(isNaN(this.hash[key])) { 
-                        debugger
-                    }
                     for(let i = this.breadCrumb.length-1; i > 0; i --) {
                         const key = this.breadCrumb.slice(0, i).join(',')
                         this.hash[key] += size
                     }
 
                 }
-                // this.completedArr.push(parts[1])
-                // const size = this.getSize(parts[0])
-                // this.addSizeToDriectory(size, this.dirList[this.dirList.length-1])
             }
         }
 
-        // this.completedArr.sort((a, b) => {
-        //     return (a[0].split('/').length ?? 0) - (b[0].split('/').length ?? 0)
-        // })
-    
+        this.getFileSizes()
+        return this.getClosestTo(30000000)
+        
+    }
 
+    getClosestTo(size: number) {
+        const sortedArr = Array.from(Object.entries(this.hash)).sort((a, b) => a[1] - b[1])
+        
+        for(let i = 0; sortedArr.length-1; i++) {
+            if((sortedArr[i][1] + this.unused) < size) continue
+            return sortedArr[i][1]
+        }
+    }
+
+    getFileSizes() {
         let retVal = 0
         for(const key of Object.keys(this.hash)) {
             if(this.hash[key] > 100000) continue
@@ -57,6 +61,8 @@ export class Filesystem {
             retVal += this.hash[key]
         }
 
+        this.usedSpace = this.hash['/']
+        this.unused = this.totalSpace - this.usedSpace
         return retVal
     }
 

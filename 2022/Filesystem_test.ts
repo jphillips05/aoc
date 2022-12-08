@@ -48,12 +48,18 @@ Deno.test('is file', () => {
     assertEquals(0, f.getSize('$ ls'))
 })
 
-Deno.test('exec', () => {
+// Deno.test('exec', () => {
+//     const f = new Filesystem(data)
+//     assertEquals(95437, f.exec())
+//     assertEquals(584, f.hash['/,a,e'])
+//     assertEquals(94853, f.hash['/,a'])
+//     assertEquals(24933642, f.hash['/,d'])
+//     assertEquals(48381165, f.hash['/'])
+// })
+
+Deno.test('space', () => {
     const f = new Filesystem(data)
-    assertEquals(95437, f.exec())
-    assertEquals(584, f.hash['/,a,e'])
-    assertEquals(94853, f.hash['/,a'])
-    assertEquals(24933642, f.hash['/,d'])
-    assertEquals(48381165, f.hash['/'])
+    assertEquals(24933642, f.exec())
+    assertEquals(21618835, f.unused)
 })
 
