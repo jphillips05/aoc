@@ -3,6 +3,7 @@ export class Treehouse {
     x: Map<number, number> = new Map<number, number>()
     y: Map<number, number> = new Map<number, number>()
     grid: number[][];
+    areaArray: number[] = [];
 
     constructor(private data: string) {
         this.grid = this.createGrid(data)
@@ -21,56 +22,80 @@ export class Treehouse {
         return retVal
     }
 
+    getArea() {
+        for(let y = 0 ; y< this.grid.length; y++) {
+            for(let x = 0; x < this.grid[0].length; x++) { 
+                this.areaArray.push(this.area(y, x))
+            }
+        }
+
+        this.areaArray.sort((a, b) => a-b)
+        return this.areaArray.pop()
+    }
+
+    area(y: number, x: number) {
+        return this.up(y, x) * this.down(y, x) * this.left(y, x) * this.right(y, x)
+    }
+
     isVisable(y: number, x: number) {
         return this.up(y, x) || this.down(y, x) || this.left(y, x) || this.right(y, x)
     }
 
     up(y: number, x: number) {
+        let retVal = 0
         const val = this.grid[y][x]
 
         let i = y-1
         while(i >= 0) {
-            if(this.grid[i][x] >= val) return false
+            retVal ++
+            if(this.grid[i][x] >= val) return retVal
             i--
         }
 
-        return true
+        return retVal
     }
 
     down(y: number, x: number) {
+        let retVal = 0
         const val = this.grid[y][x]
 
         let i = y+1
         while(i < this.grid.length) {
-            if(this.grid[i][x] >= val) return false
+            retVal ++
+            if(this.grid[i][x] >= val) return retVal
             i++
         }
 
-        return true
+        return retVal
     }
 
-    left(y: number, x: number) {
+    left(y: number, x: number): number {
+        let retVal = 0
         const val = this.grid[y][x]
 
         let i = x-1
         while(i >= 0) {
-            if(this.grid[y][i] >= val) return false
+            retVal ++
+            if(this.grid[y][i] >= val) return retVal
             i--
+            
         }
 
-        return true
+        return retVal
     }
 
-    right(y: number, x: number): boolean {
+    right(y: number, x: number) {
+        let retVal = 0
         const val = this.grid[y][x]
 
         let i = x+1
         while(i < this.grid[0].length) {
-            if(this.grid[y][i] >= val) return false
+            retVal ++
+            if(this.grid[y][i] >= val) return retVal
             i++
         }
 
-        return true
+        return retVal
     }
 
     createGrid(data: string) {
