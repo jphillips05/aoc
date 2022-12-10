@@ -3,6 +3,8 @@ export class CRT {
     values: Map<number, number> = new Map()
     value = 1
     cycle = 1
+    pos = 0
+    screen: Array<string> = []
 
     instructions: string[];
     constructor(private data: string) {
@@ -12,17 +14,45 @@ export class CRT {
 
     exec() {
         for(const ins of this.instructions) {
-            if(ins === 'noop') {
-                // this.cycle ++
-                this.values.set(this.cycle++, this.value)
-            } else {
-                this.values.set(this.cycle++, this.value)
-                this.values.set(this.cycle++, this.value)
+            this.tick(ins)
+        }
 
-                const [key, valueString] = ins.split(' ')
-                this.value += parseInt(valueString)
-            }
+        [...Array(6)].forEach(_i => console.log(this.screen.splice(0, 40).join('')))
+
+    }
+
+    checkScreen() {
+        if(this.isLit(this.pos, this.value)) {
+            this.screen.push('#')
+        } else {
+            this.screen.push('.')
+        }
+        this.pos ++
+    }
+
+    isLit(pos: number, addx: number) {
+        if(pos%40 - 1 === addx) return true
+        if(pos%40 == addx) return true
+        if(pos%40 + 1 === addx) return true
+
+        return false;
+    }
+
+    tick(ins: string) {
+        if(ins === 'noop') {
+            // this.cycle ++
+            this.checkScreen()
+            this.values.set(this.cycle++, this.value)
             
+        } else {
+            this.checkScreen()
+            this.values.set(this.cycle++, this.value)
+            this.checkScreen()
+            this.values.set(this.cycle++, this.value)
+            
+
+            const [key, valueString] = ins.split(' ')
+            this.value += parseInt(valueString)
         }
     }
 
