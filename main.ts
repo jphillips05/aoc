@@ -1,18 +1,11 @@
-import { Bridge } from "./2022/Bridge.ts"
+import { CRT } from "./2022/CRT.ts"
 
 const main = async () => {
-    let data = await Deno.readTextFile('./data/2022/day9.txt')
-//     data = 
-// `R 5
-// U 8
-// L 8
-// D 3
-// R 17
-// D 10
-// L 25
-// U 20`
-    const b = new Bridge(data)
-    console.log(b.exec())
+    let data = await Deno.readTextFile('./data/2022/day10.txt')
+
+    const crt = new CRT(data)
+    crt.exec()
+    console.log(crt.sumAt([20,60,100,140,180,220]))
 }
 
 if(import.meta.main) main()
