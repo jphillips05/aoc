@@ -1,11 +1,13 @@
 export class Bridge {
   h: number[] = [0, 0];
-  t: number[] = [0, 0];
+  t: number[][] = [];
+
   moves: string[];
   visited: string[] = ['0,0']
 
   constructor(private data: string) {
     this.moves = data.split("\n");
+    [...Array(9)].forEach(_i => this.t.push([0,0]))
   }
 
   exec(): number {
@@ -15,7 +17,6 @@ export class Bridge {
       i++
     }
 
-    console.log(this.visited)
     return this.visited.length
   }
 
@@ -23,49 +24,59 @@ export class Bridge {
     const [dir, count] = step.split(" ");
     for (let i = 0; i < parseInt(count); i++) {
       this.stepHead(dir);
-      this.stepTail();
+      
+      for(let i = 0; i < this.t.length; i++) {
+        if(i === 0) {
+            this.stepTail(this.h, this.t[i]);
+        } else {
+            this.stepTail(this.t[i-1], this.t[i])
+        }
+
+        if(i === this.t.length-1) {
+            const key = `${this.t[i][0]},${this.t[i][1]}`
+            if(!this.visited.includes(key)) {
+                this.visited.push(key)
+            }
+        }
+      }
+      
     }
   }
 
-  stepTail() {
-    const [hy, hx] = this.h;
-    const [ty, tx] = this.t;
+  stepTail(h: number[], t: number[]) {
+    const [hy, hx] = h;
+    const [ty, tx] = t;
 
     if (Math.abs(hy - ty) > 1) {
-      this.stepTailY(hy, ty);
+      this.stepTailY(t, hy, ty);
 
       if (Math.abs(hx - tx) === 1) {
-        this.stepTailX(hx, tx);
+        this.stepTailX(t, hx, tx);
       }
     }
 
     if (Math.abs(hx - tx) > 1) {
-      this.stepTailX(hx, tx);
+      this.stepTailX(t, hx, tx);
 
       if (Math.abs(hy - ty) === 1) {
-        this.stepTailY(hy, ty);
+        this.stepTailY(t, hy, ty);
       }
     }
-
-    const key = `${this.t[0]},${this.t[1]}`
-    if(!this.visited.includes(key)) {
-        this.visited.push(key)
-    }
   }
 
-  private stepTailX(hx: number, tx: number) {
+  private stepTailX(tail: number[], hx: number, tx: number) {
     if (hx - tx > 0) {
-      this.t[1]++;
+      tail[1]++;
     } else {
-      this.t[1]--;
+      tail[1]--;
     }
   }
 
-  private stepTailY(hy: number, ty: number) {
+  private stepTailY(tail: number[], hy: number, ty: number) {
     if (hy - ty > 0) {
-      this.t[0]++;
+      tail[0]++;
     } else {
-      this.t[0]--;
+      tail[0]--;
     }
   }
 
@@ -85,4 +96,26 @@ export class Bridge {
         break;
     }
   }
+
+  console() {
+    console.log('\n\n')
+    const gridSize = 20
+    let retval: string[][] = []
+    for(let y = 0; y < gridSize; y++) {
+        const row: string[] = []
+        for(let x = 0; x < gridSize; x++) {
+            row.push('.')
+        }
+        retval.push(row)
+    }
+
+    retval[this.h[0]][this.h[1]] = 'H'
+    this.t.forEach((t, idx) => {
+        if(retval[t[0]][t[1]] === '.') {
+            retval[t[0]][t[1]] = (idx+1).toString()
+        }
+    })
+    console.log(retval.reverse().map(r => r.join(' ')).join('\n'))
+  }
+
 }
