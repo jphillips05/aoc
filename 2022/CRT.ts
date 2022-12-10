@@ -14,7 +14,12 @@ export class CRT {
 
     exec() {
         for(const ins of this.instructions) {
-            this.tick(ins)
+            this.tick()
+            if(ins !== 'noop') {
+                this.tick()
+                const [key, valueString] = ins.split(' ')
+                this.value += parseInt(valueString)
+            }
         }
 
         [...Array(6)].forEach(_i => console.log(this.screen.splice(0, 40).join('')))
@@ -38,22 +43,11 @@ export class CRT {
         return false;
     }
 
-    tick(ins: string) {
-        if(ins === 'noop') {
-            // this.cycle ++
-            this.checkScreen()
-            this.values.set(this.cycle++, this.value)
+    tick() {
+        
+        this.checkScreen()
+        this.values.set(this.cycle++, this.value)
             
-        } else {
-            this.checkScreen()
-            this.values.set(this.cycle++, this.value)
-            this.checkScreen()
-            this.values.set(this.cycle++, this.value)
-            
-
-            const [key, valueString] = ins.split(' ')
-            this.value += parseInt(valueString)
-        }
     }
 
     sumAt(keys: number[]): number {
