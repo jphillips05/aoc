@@ -32,8 +32,8 @@ const main = async () => {
 //   If true: throw to monkey 0
 //   If false: throw to monkey 1`
 
-    const mim = new MonkyInTheMiddle(data)
-    console.log(mim.exec())
+    const mim = new MonkyInTheMiddle(data, 1)
+    console.log(mim.exec(10000))
 }
 
 if(import.meta.main) main()

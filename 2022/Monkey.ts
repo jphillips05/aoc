@@ -20,14 +20,15 @@ export class Monkey {
         // this.inspected = this.items.length
     }
 
-    worryLevel(item: number): number {
+    worryLevel(item: number, superMod?: number): number {
         //do operation
         this.inspected ++
+        if(superMod) return eval(`'use strict'; ${this.getExpression(item % superMod)}`)
         return eval(`'use strict'; ${this.getExpression(item)}`)
     }
 
-    getBored(worryLevel: number) {
-        return Math.floor(worryLevel/3)
+    getBored(divisor: number, worryLevel: number) {
+        return Math.floor(worryLevel/divisor)
     }
 
     nextMonkey(worryLevel: number): number[] {
@@ -70,15 +71,18 @@ export class Monkey {
 
 export class MonkyInTheMiddle {
     monkeys: Monkey[] = []
-    constructor(private data: string) {
+    divisor: number;
+    superMod: number = 1
+    constructor(private data: string, divisor: number = 3) {
+        this.divisor = divisor
         const mStrings = data.split('\n\n')
         for(let i = 0; i < mStrings.length; i++) {
             this.monkeys.push(this.buildMonkey(mStrings[i]))
         }
     }
 
-    exec() {
-        for(let i = 0; i < 20; i++) {
+    exec(turns: number) {
+        for(let i = 0; i < turns; i++) {
             this.turn()
         } 
 
@@ -92,7 +96,7 @@ export class MonkyInTheMiddle {
             const items = this.monkeys[m].items
             this.monkeys[m].items = []
             items.forEach(i => {
-                const [next, worryLevel] = this.monkeys[m].nextMonkey(this.monkeys[m].getBored(this.monkeys[m].worryLevel(i)))
+                const [next, worryLevel] = this.monkeys[m].nextMonkey(this.monkeys[m].getBored(this.divisor, this.monkeys[m].worryLevel(i, this.superMod)))
                 this.monkeys[next].addItem(worryLevel)
             })
 
@@ -104,6 +108,7 @@ export class MonkyInTheMiddle {
         const items = this.parseItems(itemsString)
         const operation = this.parseOpertation(opertationString)
         const test = this.parseTest(testString)
+        this.superMod *= test
         const nextMonkeyTrue = this.parseNextMonkey(trueString)
         const nextMonkeyFalse = this.parseNextMonkey(falseString)
         return new Monkey(items, operation, test, nextMonkeyTrue, nextMonkeyFalse)

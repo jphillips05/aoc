@@ -35,91 +35,6 @@ const monkey3 =
     If false: throw to monkey 1`
 
 
-let mim = new MonkyInTheMiddle(monkey0)
-
-Deno.test('build Monkeys', () => {
-    assertEquals([79, 98], mim.parseItems('Starting items: 79, 98'))
-    assertEquals(['old','*','19'], mim.parseOpertation('Operation: new = old * 19'))
-    assertEquals(23, mim.parseTest('Test: divisible by 23'))
-    assertEquals(2, mim.parseNextMonkey('If true: throw to monkey 2'))
-
-    let m: Monkey = mim.buildMonkey(monkey0)
-    assertEquals([79, 98], m.items)
-    assertEquals(['old','*','19'], m.operation)
-    assertEquals(23, m.test)
-    assertEquals(2, m.nextMonkeyTrue)
-
-    let item = 79
-    assertEquals(1501, m.worryLevel(item))
-    assertEquals(500, m.getBored(m.worryLevel(item)))
-    assertEquals([3, 500], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    item = 98
-    assertEquals(1862, m.worryLevel(item))
-    assertEquals(620, m.getBored(m.worryLevel(item)))
-    assertEquals([3, 620], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    m = mim.buildMonkey(monkey1)
-    item = 54
-    assertEquals(60, m.worryLevel(item))
-    assertEquals(20, m.getBored(m.worryLevel(item)))
-    assertEquals([0, 20], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    item = 65
-    assertEquals(71, m.worryLevel(item))
-    assertEquals(23, m.getBored(m.worryLevel(item)))
-    assertEquals([0, 23], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    item = 75
-    assertEquals(81, m.worryLevel(item))
-    assertEquals(27, m.getBored(m.worryLevel(item)))
-    assertEquals([0, 27], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    m = mim.buildMonkey(monkey2)
-    item = 79
-    assertEquals(6241, m.worryLevel(item))
-    assertEquals(2080, m.getBored(m.worryLevel(item)))
-    assertEquals([1, 2080], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    item = 60
-    assertEquals(3600, m.worryLevel(item))
-    assertEquals(1200, m.getBored(m.worryLevel(item)))
-    assertEquals([3, 1200], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    item = 97
-    assertEquals(9409, m.worryLevel(item))
-    assertEquals(3136, m.getBored(m.worryLevel(item)))
-    assertEquals([3, 3136], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    m = mim.buildMonkey(monkey3)
-    item = 74
-    assertEquals(77, m.worryLevel(item))
-    assertEquals(25, m.getBored(m.worryLevel(item)))
-    assertEquals([1, 25], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    item = 500
-    assertEquals(503, m.worryLevel(item))
-    assertEquals(167, m.getBored(m.worryLevel(item)))
-    assertEquals([1, 167], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    item = 620
-    assertEquals(623, m.worryLevel(item))
-    assertEquals(207, m.getBored(m.worryLevel(item)))
-    assertEquals([1, 207], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    item = 1200
-    assertEquals(1203, m.worryLevel(item))
-    assertEquals(401, m.getBored(m.worryLevel(item)))
-    assertEquals([1, 401], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-    item = 3136
-    assertEquals(3139, m.worryLevel(item))
-    assertEquals(1046, m.getBored(m.worryLevel(item)))
-    assertEquals([1, 1046], m.nextMonkey(m.getBored(m.worryLevel(item))))
-
-})
-
-Deno.test('exec', () => {
     const d = 
 `Monkey 0:
 Starting items: 79, 98
@@ -149,7 +64,95 @@ Test: divisible by 17
   If true: throw to monkey 0
   If false: throw to monkey 1`
 
-    let mim = new MonkyInTheMiddle(d)
+let mim = new MonkyInTheMiddle(monkey0, 3)
+
+Deno.test('build Monkeys', () => {
+    const divisor = 3
+    assertEquals([79, 98], mim.parseItems('Starting items: 79, 98'))
+    assertEquals(['old','*','19'], mim.parseOpertation('Operation: new = old * 19'))
+    assertEquals(23, mim.parseTest('Test: divisible by 23'))
+    assertEquals(2, mim.parseNextMonkey('If true: throw to monkey 2'))
+
+    let m: Monkey = mim.buildMonkey(monkey0)
+    assertEquals([79, 98], m.items)
+    assertEquals(['old','*','19'], m.operation)
+    assertEquals(23, m.test)
+    assertEquals(2, m.nextMonkeyTrue)
+
+    let item = 79
+    assertEquals(1501, m.worryLevel(item))
+    assertEquals(500, m.getBored(3,m.worryLevel(item)))
+    assertEquals([3, 500], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    item = 98
+    assertEquals(1862, m.worryLevel(item))
+    assertEquals(620, m.getBored(3,m.worryLevel(item)))
+    assertEquals([3, 620], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    m = mim.buildMonkey(monkey1)
+    item = 54
+    assertEquals(60, m.worryLevel(item))
+    assertEquals(20, m.getBored(3,m.worryLevel(item)))
+    assertEquals([0, 20], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    item = 65
+    assertEquals(71, m.worryLevel(item))
+    assertEquals(23, m.getBored(3,m.worryLevel(item)))
+    assertEquals([0, 23], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    item = 75
+    assertEquals(81, m.worryLevel(item))
+    assertEquals(27, m.getBored(3,m.worryLevel(item)))
+    assertEquals([0, 27], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    m = mim.buildMonkey(monkey2)
+    item = 79
+    assertEquals(6241, m.worryLevel(item))
+    assertEquals(2080, m.getBored(3,m.worryLevel(item)))
+    assertEquals([1, 2080], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    item = 60
+    assertEquals(3600, m.worryLevel(item))
+    assertEquals(1200, m.getBored(3,m.worryLevel(item)))
+    assertEquals([3, 1200], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    item = 97
+    assertEquals(9409, m.worryLevel(item))
+    assertEquals(3136, m.getBored(3,m.worryLevel(item)))
+    assertEquals([3, 3136], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    m = mim.buildMonkey(monkey3)
+    item = 74
+    assertEquals(77, m.worryLevel(item))
+    assertEquals(25, m.getBored(3,m.worryLevel(item)))
+    assertEquals([1, 25], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    item = 500
+    assertEquals(503, m.worryLevel(item))
+    assertEquals(167, m.getBored(3,m.worryLevel(item)))
+    assertEquals([1, 167], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    item = 620
+    assertEquals(623, m.worryLevel(item))
+    assertEquals(207, m.getBored(3,m.worryLevel(item)))
+    assertEquals([1, 207], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    item = 1200
+    assertEquals(1203, m.worryLevel(item))
+    assertEquals(401, m.getBored(3,m.worryLevel(item)))
+    assertEquals([1, 401], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+    item = 3136
+    assertEquals(3139, m.worryLevel(item))
+    assertEquals(1046, m.getBored(3,m.worryLevel(item)))
+    assertEquals([1, 1046], m.nextMonkey(m.getBored(3,m.worryLevel(item))))
+
+})
+
+Deno.test('exec', () => {
+    
+
+    let mim = new MonkyInTheMiddle(d, 3)
     //1
     mim.turn()
     assertArrayIncludes(mim.monkeys[0].items, [20, 23, 27, 26])
@@ -240,7 +243,26 @@ Test: divisible by 17
     assertEquals(7, mim.monkeys[2].inspected)
     assertEquals(105, mim.monkeys[3].inspected)
     
-    mim = new MonkyInTheMiddle(d)
-    assertEquals(10605, mim.exec())
+    mim = new MonkyInTheMiddle(d, 3)
+    assertEquals(10605, mim.exec(20))
 
+})
+
+Deno.test('part2', () => {
+  let mim = new MonkyInTheMiddle(d, 1);
+  mim.turn()
+  assertEquals(2, mim.monkeys[0].inspected);
+  assertEquals(4, mim.monkeys[1].inspected);
+  assertEquals(3, mim.monkeys[2].inspected);
+  assertEquals(6, mim.monkeys[3].inspected);
+
+  mim = new MonkyInTheMiddle(d, 1);
+  [...Array(10000)].forEach(_i => mim.turn())
+  assertEquals(52166, mim.monkeys[0].inspected);
+  assertEquals(47830, mim.monkeys[1].inspected);
+  assertEquals(1938, mim.monkeys[2].inspected);
+  assertEquals(52013, mim.monkeys[3].inspected);
+
+  mim = new MonkyInTheMiddle(d, 1);
+  assertEquals(2713310158, mim.exec(10000))
 })
