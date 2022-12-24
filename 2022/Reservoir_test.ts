@@ -8,7 +8,7 @@ const data =
 
 Deno.test('out of bounds', () => {
     const r = new Reservoir(data)
-    assertEquals(r.outOfBounds(9, 493), true)
+    assertEquals(r.outOfBounds(9, 493), false)
     assertEquals(r.outOfBounds(9, 494), false)
 })
 
@@ -56,4 +56,9 @@ Deno.test('drop', () => {
     assert(r.taken.indexOf('7,495') === -1)
     assert(r.taken.indexOf('7,496') === -1)
 
+})
+
+Deno.test('floor', () => {
+    const r = new Reservoir(data)
+    assertEquals(r.floor, 11)
 })

@@ -9,9 +9,11 @@ export class Reservoir {
     startY = 0
     startX = 500
     sand = 0
+    floor = 0
 
     constructor(private data: string) {
         this.taken = this.buildGrid(data.split('\n'))
+        this.floor = this.yHigh + 2
     }
 
     exec() {
@@ -20,9 +22,13 @@ export class Reservoir {
             if(!this.drop()) {
                 break
             }
+
+            if(this.sand % 1000 === 0) {
+                console.log(this.sand)
+            }
         }
 
-        return(this.sand-1)
+        return(this.sand)
     }
 
     dropAmount(amount: number) {
@@ -63,6 +69,11 @@ export class Reservoir {
                 continue
             }
 
+            //cant drop
+            if(y === this.startY && x == this.startX) {
+                return false
+            }
+
             //rest
             this.taken.push(this.keyFromYX(y, x))
             return true
@@ -76,17 +87,13 @@ export class Reservoir {
     }
 
     outOfBounds(y: number,x: number) {
-        if(y > this.yHigh) return true
-
-        if(x > this.xHigh) return true
-        if(x < this.xLow) return true
-
         return false
-
     }
 
     blocked(y: number, x: number) {
-        return this.taken.includes(this.keyFromYX(y, x))
+        return this.taken.indexOf(this.keyFromYX(y,x)) > -1 || y === this.floor
+        // return this.taken.some(t => t === this.keyFromYX(y, x)) || y === this.floor
+        // return this.taken.includes(this.keyFromYX(y, x)) || y === this.floor
     }
 
     buildGrid(instructions: string[]) {
@@ -110,7 +117,8 @@ export class Reservoir {
 
         this.range(parseInt(fromY), parseInt(toY)).forEach(y => {
             this.range(parseInt(fromX), parseInt(toX)).forEach(x => {
-                if(!taken.includes(this.keyFromYX(y, x))) {
+                if(taken.indexOf(this.keyFromYX(y, x)) === -1) {
+                //if(!taken.includes(this.keyFromYX(y, x))) {
                     if(x > this.xHigh) this.xHigh = x
                     if(y > this.yHigh) this.yHigh = y
                     if(x < this.xLow) this.xLow = x
@@ -123,7 +131,9 @@ export class Reservoir {
     }
 
     getGridValue(y: number, x: number): string {
-        return this.taken.includes(this.keyFromYX(y, x)) ? '#' : '.'
+        return this.taken.indexOf(this.keyFromYX(y,x)) > -1 ? '#' : '.'
+        // return this.taken.some(t => t === this.keyFromYX(y,x)) ? '#' : '.'
+        // return this.taken.includes(this.keyFromYX(y, x)) ? '#' : '.'
     }
 
     

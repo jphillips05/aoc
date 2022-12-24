@@ -8,6 +8,7 @@ const main = async () => {
 // 503,4 -> 502,4 -> 502,9 -> 494,9`
 
 const r = new Reservoir(data)
+console.log(r.floor)
 console.log(r.exec())
 
 }
