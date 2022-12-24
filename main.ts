@@ -1,16 +1,14 @@
-import { Hill } from "./2022/Hill.ts"
+import { Reservoir } from "./2022/Reservoir.ts"
+
 
 const main = async () => {
-    let data = await Deno.readTextFile('./data/2022/day12.txt')
+    let data = await Deno.readTextFile('./data/2022/day14.txt')
 // data = 
-// `Sabqponm
-// abcryxxl
-// accszExk
-// acctuvwj
-// abdefghi`
+// `498,4 -> 498,6 -> 496,6
+// 503,4 -> 502,4 -> 502,9 -> 494,9`
 
-    const h = new Hill(data)
-    console.log(h.exec())
+const r = new Reservoir(data)
+console.log(r.exec())
 
 }
 
